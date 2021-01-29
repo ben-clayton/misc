@@ -83,14 +83,14 @@ type RGBX = vec3<f32>;
 
 ### Structure Layouts
 
-The rules for aligning a struct field:
+The rules for aligning a structure field:
 
+* A field uses the alignment and size of it's type, unless the field is explicitly annotated with `[[align(n)]]` and / or `[[size(n)]]` decorations, in which case these field decorations take precedence.
 * The first field is always at offset 0 of the structure.
 * Subsequent fields have an offset that has the byte offset: <code>roundUp(alignment <sub>field</sub>, offset <sub>previous field</sub> + size <sub>previous field</sub>)</code>.
 * The default alignment of a structure is the same as the field with the largest alignment.
 * The default size of a structure is equal to: `roundUp(alignof(S), offsetof(last field) + sizeof(last field))`
 * Structures nested in other structures behave the same as any other field type.
-* Individual structure fields may be annotated with `[[align(n)]]` and / or `[[size(n)]]` decorations to override their default layout. Field decorations will override any decorations defined on the type.
 
 ### Default Structure Layout Example
 
