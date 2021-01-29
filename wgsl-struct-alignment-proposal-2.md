@@ -22,7 +22,7 @@
 
 4. _Rules_ for valid uniform/storage buffer layouts are defined separately from the _algorithm_ that defines the default layout
 
-    This proposal intentionally does define the layout rules for the various storage classes, but does demonstrate how more restrictive storage class layouts are supported.
+    This proposal intentionally does not define the layout rules for the various storage classes, but does demonstrate how more restrictive storage class layouts are supported.
 
 ## Proposal
 
