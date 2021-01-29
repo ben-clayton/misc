@@ -78,6 +78,7 @@ type RGBX = vec3<f32>;
 | Type          | Default stride (bytes)           |
 |---------------|----------------------------------|
 | `array<T, N>` | `roundUp(alignof(T), sizeof(T))` |
+| `array<T>`    | `roundUp(alignof(T), sizeof(T))` |
 
 
 ### Structure Layouts
