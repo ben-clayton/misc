@@ -2,7 +2,7 @@
 
 ## Design principles
 
-1. Provides a single **default layout** for any datatype (primitive, structure, array).
+1. Provides a single **default layout** for any host-shareable datatype (primitive, structure, array).
 
     The layout is always valid for storage buffers. \
     The rules are practical - not too wasteful. \
