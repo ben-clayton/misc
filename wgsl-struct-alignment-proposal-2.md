@@ -59,12 +59,16 @@ In particular, the column vector must be aligned.
 
 Structures and type aliases may have their defaults overridden by using the `[[size(n)]]` or `[[align(n)]]` decorations on their declaration:
 
+Example:
+
 ```rust
+// Override default size and alignment
 [[size(16), align(32)]]
 struct S {
   u32 i;
 };
 
+// Override default size, keep default alignment
 [[size(16)]]
 type RGBX = vec3<f32>;
 ```
