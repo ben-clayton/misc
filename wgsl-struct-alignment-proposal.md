@@ -155,8 +155,48 @@ Suppose we translate it like this:
 Consider the Vulkan translation. 
 We should only touch the `b` component via atomic operations.
 We might introduce data races if we do non-atomic loads and stores on the whole vector or on what would be the `b` component. 
+The danger occurs when doing normal loads and stores on the whole vector.
+That introduces new normal loads and stores that can race with atomics from the "other" thread.
 
-The right solution is likely to scalarize the 4 elements of the vector:
+Here's an original program (schematically):
+
+       Thread 0:
+              atomic store to foo.b
+              normal store to foo.a
+       
+       
+       Thread 1:
+              atomic load from foo.b
+
+This has no race because the only locations touched by both threads is the atomic `b` and it's only via atomic operations.
+
+
+Here is the translated program after widening the struct to a 4-element vector:
+
+       Thread 0:
+              atomic store to foo.b
+              normal store to vec4 covering all 16 bytes: a b c
+       
+       
+       Thread 1:
+              atomic load from foo.b
+
+Now we have a normal store to `b` in one thread and an atomic load from the other thread.
+
+This doesn't occur in C++ because of type rules and the fact that atomics are separate types.
+
+SPIR-V Vulkan allows you to intermix normal and atomic accesses provided you synchronize properly.
+But if all of thread 0 executes then all of thread 1 executes then we have a race from the second store in thread 0 to the atomic load in thread 1.
+
+If we modify the example to swap the loads for stores and vice versa, we still get a race in a different schedule but in the opposite direction:
+The store from thread 1 can race the vector load in thread 0:
+the store might occur before or after the load, changing what the load sees, but
+in an unsynchronized manner.
+
+The conclusion is you can't do a vector-wide memory accesses when the widened vector covers a location used atomically.
+So we can can either ban the mixing, or break everything down to scalars.
+
+It's likely the right solution is to scalarize the 4 elements of the vector:
 
 ```rust
 [[block]] struct Uniforms {
