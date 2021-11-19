@@ -642,7 +642,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Backend | Function                                                                                                                                              | Comments                   |
 |---------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
-| HLSL    | [`Texture2DArray.Gather(sampler s, float3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-gather)  |                            |
+| HLSL    | [`Texture2DArray.Gather(sampler s, float3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-gather)  | Array index in `coord.z`.  |
 | MSL     | `Tv depth2d_array.gather(sampler s, float2 coord, uint array[, int2 offset])`                                                                         |                            |
 | SPIR-V  | [`OpImageGather <sampled-image> <coord> <component> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageGather) | Array index in `coord[2]`. |
 
@@ -656,11 +656,11 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 ### Gather - Cube Depth Texture Array
 
-| Backend | Function                                                                                                                                              | Comments |
-|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL    | [`TextureCube.Gather(sampler s, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-gather)                       |          |
-| MSL     | `Tv depthcube_array.gather(sampler s, float3 coord, uint array)`                                                                                      |          |
-| SPIR-V  | [`OpImageGather <sampled-image> <coord> <component> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageGather) |          |
+| Backend | Function                                                                                                                                              | Comments                   |
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
+| HLSL    | [`TextureCube.Gather(sampler s, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-gather)                       | Array index in `coord.w`.  |
+| MSL     | `Tv depthcube_array.gather(sampler s, float3 coord, uint array)`                                                                                      |                            |
+| SPIR-V  | [`OpImageGather <sampled-image> <coord> <component> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageGather) | Array index in `coord[3]`. |
 
 ## Gather Compare
 
