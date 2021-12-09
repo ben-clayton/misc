@@ -118,6 +118,45 @@ var i : i32 = C / 2;
 
 ---
 
+## Large number arithmetic to `f32`
+
+```ts
+var f : f32 = 1.0e+40 / 1.0e+35;
+```
+
+| Language                                                   | Value of `f`                                                                           | Notes
+|------------------------------------------------------------|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------
+| HLSL (DXC)                                                 | [`100000.0`](https://shader-playground.timjones.io/aa819b1b1127722336fec7b2a5a770bd)   | [Arithmetic performed in `f64`, then converted to `f32`](https://github.com/gpuweb/gpuweb/pull/2306#issuecomment-988251893)             |
+| HLSL (FXC)                                                 | [`100000.0`](https://shader-playground.timjones.io/57dd5a6ae4d00e1314b0a46617ecc31f)   | Arithmetic performed in `f64`?                                                                                                          |
+| MSL 2.0                                                    | -                                                                                      | MSL does not support `f64`.<br>See: [2.1 Scalar Data Types](https://developer.apple.com/metal/Metal-Shading-Language-Specification.pdf) |
+| C++                                                        | [`100000.0`](https://godbolt.org/z/7be6dTx3a)                                          | Unsuffixed float literals are `double`                                                                                                  |
+| Go                                                         | [`100000.0`](https://go.dev/play/p/ZSrQYsCEyte)                                        | Arithmetic performed in high-precision, then converted to `f32`                                                                         |
+| JavaScript                                                 | [`100000.0`](http://jsfiddle.net/tcubLmjx/)                                            | Arithmetic performed in `f64`, no other number type.                                                                                    |
+| WGSL [#2200](https://github.com/gpuweb/gpuweb/issues/2200) | `100000.0`                                                                             | Arithmetic performed in `f64`, then converted to `f32`                                                                                  |
+| WGSL [#2306](https://github.com/gpuweb/gpuweb/pull/2306)   | Error                                                                                  | `f` is `f32`, so this will be applied to both literals, but these cannot be represented as a `f32`                                      |
+
+---
+
+## Large number in inferred-type `const`
+
+```ts
+const C = 1.0e+40;
+var f : f64 = C / 1.0e+35;
+```
+
+| Language                                                   | Value of `f`                                                                           | Notes
+|------------------------------------------------------------|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------
+| HLSL (DXC)                                                 | -                                                                                      | No way to declare a variable with inferred type                                                                                         |
+| HLSL (FXC)                                                 | -                                                                                      | No way to declare a variable with inferred type                                                                                         |
+| MSL 2.0                                                    | -                                                                                      | MSL does not support `f64`.<br>See: [2.1 Scalar Data Types](https://developer.apple.com/metal/Metal-Shading-Language-Specification.pdf) |
+| C++                                                        | [`100000.0`](https://godbolt.org/z/oGhv4vsG1)                                          | Unsuffixed float literals are `double`                                                                                                  |
+| Go                                                         | [`100000.0`](https://go.dev/play/p/2DWJ3yaicR_S)                                       | Arithmetic performed in high-precision, then converted to `f32`                                                                         |
+| JavaScript                                                 | [`100000.0`](http://jsfiddle.net/rq657y3x/)                                            | Arithmetic performed in `f64`, no other number type.                                                                                    |
+| WGSL [#2200](https://github.com/gpuweb/gpuweb/issues/2200) | `100000.0`                                                                             | Arithmetic performed in `f64`, then converted to `f32`                                                                                  |
+| WGSL [#2306](https://github.com/gpuweb/gpuweb/pull/2306)   | `100000.0` or error                                                                    | If `const` has fixed type, then errors as `C` would be `f32`, and number does not fit.                                                  |
+
+---
+
 Hex ⟷ `f32` / decimal reference:
 | hex                 | float        |
 |---------------------|--------------|
@@ -125,6 +164,8 @@ Hex ⟷ `f32` / decimal reference:
 |`0x416fffffe0000000` | `16777215.0` |
 |`0x4b7fffff`         | `16777215.0` |
 |`0x4170000000000000` | `16777216.0` |
+|`0x47c35000`         | `10000000.0` |
+|`0x40f86a0000000000` | `10000000.0` |
 
 | hex          | dec          |
 |--------------|--------------|
