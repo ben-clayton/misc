@@ -17,6 +17,23 @@ All host sharable types will have new members that reflect the type's memory siz
  `const align : abstract-int` | The alignment in bytes of the type | `const c = vec3f.align;`
  `const size : abstract-int`  | The size in bytes of the type      | `const c = i32.size;`
 
+### Integer types
+
+All integer types (`i32`, `u32`) will have the following additional members:
+
+ | Name                           | Description                                                               | Example                  |
+ |--------------------------------|---------------------------------------------------------------------------|--------------------------|
+ | `const highest : abstract-int` | The highest positive value representable by the type                      | `const a = i32.highest;` |
+ | `const lowest : abstract-int`  | The lowest value representable by the type. Negative for signed integers. | `const b = i32.lowest;`  |
+
+All floating point types (`f32`, `f16`) will have the following additional members:
+
+ | Name                              | Description                                                   | Example                   |
+ |-----------------------------------|---------------------------------------------------------------|---------------------------|
+ | `const highest : abstract-float`  | The highest, finite, positive value representable by the type | `const a = f32.highest;`  |
+ | `const lowest : abstract-float`   | The lowest, finite, negative value representable by the type  | `const b = f32.lowest;`   |
+ | `const smallest : abstract-float` | The smallest, non-subnormal value representable by the type   | `const b = f32.smallest;` |
+
 ### Array types
 
 Both fixed-size and runtime-sized array types will have the following additional members:
