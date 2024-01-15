@@ -8,14 +8,6 @@ This proposal introduces two new fundamental changes to expressions:
 
 ## New type members
 
-### All types
-
-All types will have the following members:
-
- Name                         | Description                        | Example
- -----------------------------|------------------------------------|---------------
- `const is_host_sharable : bool` | True if the type is host sharable | `if (T.is_host_sharable) {`
-
 ### Host sharable types
 
 All host sharable types will have new members that reflect the type's memory size and alignment:
@@ -69,15 +61,6 @@ Atomic types will have the following additional members:
 |----------------|-------------------------|---------------------------------|
 | `element : T`  | The atomic integer type | `var v : atomic<i32>.element;`  |
 
-### Structure types
-
-Structure types will have a type member for each declared member of the structure. Each type member will have the following sub-members:
-
-| Name                          | Description                      | Example (`struct S { a : i32, b : u32, c : f32 }`) |
-|-------------------------------|----------------------------------|----------------------------------------------------|
-| `const offset : abstract-int` | The byte offset in the structure | `const o = S.a.offset;`                            |
-| `type : T`                    | The type of the member           | `let a : S.b.type = S().b;`                        |
-
 ### Sampled, Multisampled and Depth texture types
 
 Sampled and Multisampled and Depth texture types will have the following additional members:
@@ -108,8 +91,24 @@ Pointer types will have the following additional members:
 | `space : ADDRESS_SPACE` | The [address space](https://www.w3.org/TR/WGSL/#memory-access) of the pointer type | `alias P2 = ptr<P.space, u32, read>;`                |
 | `access : ACCESS`       | The [access](https://www.w3.org/TR/WGSL/#memory-access) of the pointer type        | `alias P2 = ptr<storage, u32, P.access>;`            |
 
-## `typeof(E)`
+## `typeOf(E)`
 
-`typeof(E)` is a new builtin function that returns the type of the value-expression `E`.
+`@const typeOf(E) -> T` is a new builtin function that returns the type of the value-expression `E`.
 
-If `E` is of a reference type, then `typeof` returns the store-type of the reference.
+If `E` is of a reference type, then `typeOf` returns the store-type of the reference.
+
+## `offsetOf(S, M)`
+
+`@const offsetOf(S, M) -> abstract-int` returns the byte offset of the member with the name `M` in the structure `S`.
+
+Example:
+
+```wgsl
+struct S {
+    a : i32,
+    b : i32,
+    c : i32,
+}
+
+const_assert(offsetOf(S, b) == 4);
+```
