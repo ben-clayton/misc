@@ -1,4 +1,4 @@
-# WGSL type info proposal
+# WGSL traits proposal
 
 This proposal introduces two new fundamental changes to expressions:
 
