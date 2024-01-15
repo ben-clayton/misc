@@ -45,9 +45,9 @@ Both fixed-size and runtime-sized array types will have the following additional
 
 Fixed-size array types will have an additional `length` member:
 
-| Name                          | Description                         | Example                                         |
+| Name                          | Description                         | Example (`alias A = array<i32, 4>;`)            |
 |-------------------------------|-------------------------------------|-------------------------------------------------|
-| `const length : abstract-int` | The number of elements in the array | `for (var i = 0; i < arr.length; i++) { ... }`  |
+| `const length : abstract-int` | The number of elements in the array | `for (var i = 0; i < A.length; i++) { ... }`    |
 
 ### Vector types
 
